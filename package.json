@@ -1,0 +1,20 @@
+{
+  "name": "tp",
+  "version": "1.0.0",
+  "description": "Delilah Resto Endpoints",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Maria Salas",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.3.5",
+    "swagger-ui-express": "^4.1.6",
+    "yup": "^0.32.8"
+  }
+}

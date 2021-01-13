@@ -1,0 +1,654 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Delilah Resto Project",
+      "description": "APIs para manejo de productos, usuarios y órdenes dentro del proyecto Delilah Restó",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "host": "localhost:8001",
+    "basePath": "/",
+    "tags": [
+      {
+        "name": "Users",
+        "description": "Manejo de usuarios"
+      },
+      {
+        "name": "Products",
+        "description": "Manejo de productos en el resto"
+      },
+      {
+        "name": "Orders",
+        "description": "Manejo de órdenes en el resto"
+      }
+    ],
+    "schemes": [
+      "http"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "paths": {
+      "/login": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "description": "Logeo de usuario",
+          "parameters": [
+            {
+              "name": "user",
+              "in": "body",
+              "description": "Datos para logear un usuario",
+              "schema": {
+                "$ref": "#/definitions/UserLogsIn"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Log in exitoso"
+            },
+            "400": {
+              "description": "Mail y contraseña incorrectas"
+            },
+            "403": {
+              "description": "Necesita registrarse para acceder"
+            }
+          }
+        } 
+      },
+      "/logout": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "description": "Cierre de sesión de usuario",
+          
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Sesión finalizada"
+            }
+          }
+        } 
+      },
+      "/add/user": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "description": "Crear nuevo usuario en el resto, por defecto lo creará como usuario no admin. Para pasarlo a admin debe cambiarse directamente sobre la BD",
+          "parameters": [
+            {
+              "name": "user",
+              "in": "body",
+              "description": "Usuario que queremos crear",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Usuario creado con éxito"
+            },
+            "400": {
+              "description": "Faltan campos, por favor ingrese todos los datos || Ya existe este usuario, por favor ingrese otro || Ya existe un usuario asociado a ese mail, por favor ingrese otro"
+            }
+          }
+        }
+      },
+      "/call": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "description": "Llamada a usuario por parte del restó",
+          "parameters": [
+            {
+              "name": "user",
+              "in": "body",
+              "description": "Datos para llamar a un usuario",
+              "schema": {
+                "$ref": "#/definitions/CallUser"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Teléfono del usuario"
+            },
+            "401": {
+              "description": "Su sesión ha caducado, por favor inicie sesión nuevamente"
+            },
+            "403": {
+              "description": "El usuario no tiene permisos para realizar esta acción"
+            }
+          }
+        } 
+      },
+      "/add/product-to-resto": {
+        "post": {
+          "tags": [
+            "Products"
+          ],
+          "description": "Crear nuevo producto en el resto",
+          "parameters": [
+            {
+              "name": "product",
+              "in": "body",
+              "description": "Producto que queremos crear",
+              "schema": {
+                "$ref": "#/definitions/Product"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Producto creado con éxito"
+            },
+            "401": {
+              "description": "Su sesión ha caducado, por favor inicie sesión nuevamente"
+            },
+            "403": {
+              "description": "El usuario no tiene permisos para realizar esta acción"
+            },
+            "409": {
+              "description": "Ya existe un producto con este nombre, por favor ingrese otro"
+            }
+          }
+        }
+      },
+      "/edit/product-to-resto": {
+        "post": {
+          "tags": [
+            "Products"
+          ],
+          "description": "Editar producto en el resto",
+          "parameters": [
+            {
+              "name": "product",
+              "in": "body",
+              "description": "Producto que queremos editar",
+              "schema": {
+                "$ref": "#/definitions/ProductToChange"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Producto actualizado  con éxito"
+            },
+            "401": {
+              "description": "Su sesión ha caducado, por favor inicie sesión nuevamente"
+            },
+            "403": {
+              "description": "El usuario no tiene permisos para realizar esta acción"
+            },
+            "409": {
+              "description": "No existe un producto con este ID, por favor ingrese otro"
+            }
+          }
+        }
+      },
+      "/eliminate/product-to-resto": {
+        "post": {
+          "tags": [
+            "Products"
+          ],
+          "description": "Eliminar producto en el resto",
+          "parameters": [
+            {
+              "name": "product",
+              "in": "body",
+              "description": "Producto que queremos eliminar",
+              "schema": {
+                "$ref": "#/definitions/ProductToChange"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Producto eliminado con éxito"
+            },
+            "401": {
+              "description": "Su sesión ha caducado, por favor inicie sesión nuevamente"
+            },
+            "403": {
+              "description": "El usuario no tiene permisos para realizar esta acción"
+            },
+            "409": {
+              "description": "No existe un producto con este ID, por favor ingrese otro"
+            }
+          }
+        }
+      },
+      "/view/product-list": {
+        "post": {
+          "tags": [
+            "Products"
+          ],
+          "description": "Visualizar lista de productos del resto",
+          "parameters": [
+            {
+              "name": "product",
+              "in": "body",
+              "description": "Productos disponibles",
+              "schema": {
+                "$ref": "#/definitions/Mail"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/Product"
+              }
+            },
+            "401": {
+              "description": "Su sesión ha caducado, por favor inicie sesión nuevamente"
+            }
+          }
+        }
+      },
+      "/create/order": {
+        "post": {
+          "tags": [
+            "Orders"
+          ],
+          "description": "Crear orden a partir de selección de producto",
+          "parameters": [
+            {
+              "name": "orden",
+              "in": "body",
+              "description": "Orden",
+              "schema": {
+                "$ref": "#/definitions/Orden"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "El producto fue agregado a la orden || Orden creada con éxito"
+            },
+            "401": {
+              "description": "Su sesión ha caducado, por favor inicie sesión nuevamente"
+            }
+          }
+        }
+      },
+      "/confirm/order": {
+        "post": {
+          "tags": [
+            "Orders"
+          ],
+          "description": "Actualizar status de la orden a 'Confirmado' por pedido del usuario",
+          "parameters": [
+            {
+              "name": "orden",
+              "in": "body",
+              "description": "Orden",
+              "schema": {
+                "$ref": "#/definitions/Orden"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Orden confirmada con exito"
+            },
+            "401": {
+              "description": "Su sesión ha caducado, por favor inicie sesión nuevamente"
+            }
+          }
+        }
+      },
+      "/update/orderstatus": {
+        "post": {
+          "tags": [
+            "Orders"
+          ],
+          "description": "Actualiza status de la orden para informar al cliente si está siendo preparada, enviada o entregada",
+          "parameters": [
+            {
+              "name": "orden",
+              "in": "body",
+              "description": "Orden",
+              "schema": {
+                "$ref":  "#/definitions/Update"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Estado de la orden actualizado"
+            },
+            "401": {
+              "description": "Su sesión ha caducado, por favor inicie sesión nuevamente"
+            },
+            "403": {
+              "description": "El usuario no tiene permisos para realizar esta acción"
+            },
+            "409": {
+              "description": "No puede cambiarse el estado de la orden hasta que el usuario no la confirme"
+            }
+          }
+        }
+      },
+      "/view/order": {
+        "post": {
+          "tags": [
+            "Orders"
+          ],
+          "description": "Visualizar orden a partir de solicitud de seguir",
+          "parameters": [
+            {
+              "name": "orden",
+                "in": "body",
+                "description": "Orden",
+              "schema": {
+                "$ref": "#/definitions/MailNum"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/Orden"
+              }
+            },
+            "401": {
+              "description": "Su sesión ha caducado, por favor inicie sesión nuevamente"
+            }
+          }
+        }
+      },
+      "/view/order-list": {
+        "post": {
+          "tags": [
+            "Orders"
+          ],
+          "description": "Visualizar lista de órdenes",
+          "parameters": [
+            {
+              "name": "orden",
+                "in": "body",
+                "description": "Orden",
+              "schema": {
+                "$ref": "#/definitions/Mail"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/Orden"
+              }
+            },
+            "401": {
+              "description": "Su sesión ha caducado, por favor inicie sesión nuevamente"
+            },
+            "403": {
+              "description": "El usuario no tiene permisos para realizar esta acción"
+            }
+          }
+        }
+      },
+      "/cancel/order": {
+        "post": {
+          "tags": [
+            "Orders"
+          ],
+          "description": "Cancelar orden a solicitud del restó",
+          "parameters": [
+            {
+              "name": "orden",
+                "in": "body",
+                "description": "Orden",
+              "schema": {
+                "$ref": "#/definitions/MailNum"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "La orden ha sido cancelada"
+            },
+            "401": {
+              "description": "Su sesión ha caducado, por favor inicie sesión nuevamente"
+            },
+            "403": {
+              "description": "El usuario no tiene permisos para realizar esta acción"
+            }
+          }
+        }
+      }
+  },
+    "definitions": {
+      "User": {
+        "properties": {
+            "items": {
+                "type": "object",
+                "properties": {
+                  "USER": {
+                    "type": "string"
+                  },
+                  "NOMBRE_APELLIDO": {
+                    "type": "string"
+                  },
+                  "MAIL": {
+                    "type": "string"
+                  },
+                  "TELEFONO": {
+                    "type": "string"
+                  },
+                  "DIRECCION": {
+                    "type": "string"
+                  },
+                  "PASS": {
+                    "type": "string"
+                  }
+                }
+            }
+        }
+      },
+      "UserLogsIn": {
+        "properties": {
+            "items": {
+                "type": "object",
+                "properties": {
+                  "MAIL": {
+                    "type": "string"
+                  },
+                  "PASS": {
+                    "type": "string"
+                  }
+                }
+            }
+        }
+      },
+      "CallUser": {
+        "properties": {
+            "items": {
+                "type": "object",
+                "properties": {
+                  "MAIL": {
+                    "type": "string"
+                  },
+                  "USUARIO": {
+                    "type": "string"
+                  }
+                }
+            }
+        }
+      },
+      "Mail": {
+        "properties": {
+            "items": {
+                "type": "object",
+                "properties": {
+                  "MAIL": {
+                    "type": "string"
+                  }
+                }
+            }
+        }
+      },
+      "MailNum": {
+        "properties": {
+            "items": {
+                "type": "object",
+                "properties": {
+                  "MAIL": {
+                    "type": "string"
+                  },
+                  "NUMERO": {
+                    "type": "number"
+                  }
+                }
+            }
+        }
+      },
+      "Product": {
+        "properties": {
+            "items": {
+                "type": "object",
+                "properties": {
+                  "NAME_PRODUCT": {
+                    "type": "string"
+                  },
+                  "PRICE_PRODUCT": {
+                    "type": "number"
+                  },
+                  "IMAGE_PRODUCT": {
+                    "type": "string"
+                  },
+                  "MAIL": {
+                    "type": "string"
+                  }
+                }
+            }
+        }
+      },
+      "ProductToChange": {
+        "properties": {
+            "items": {
+                "type": "object",
+                "properties": {
+                  "ID": {
+                    "type": "number"
+                  },
+                  "NAME_PRODUCT": {
+                    "type": "string"
+                  },
+                  "PRICE_PRODUCT": {
+                    "type": "number"
+                  },
+                  "IMAGE_PRODUCT": {
+                    "type": "string"
+                  },
+                  "MAIL": {
+                    "type": "string"
+                  }
+                }
+            }
+        }
+      },
+      "Orden": {
+        "properties": {
+            "items": {
+                "type": "object",
+                "properties": {
+                  "DESCRIPCION": {
+                    "type": "object"
+                  },
+                  "PAGO_TIPO": {
+                    "type": "string"
+                  },
+                  "PAGO_MONTO": {
+                    "type": "string"
+                  },
+                  "USUARIO": {
+                    "type": "string"
+                  },
+                  "DIRECCION": {
+                    "type": "string"
+                  },
+                  "MAIL": {
+                    "type": "string"
+                  }
+                }
+            }
+        }
+      },
+      "Update": {
+        "properties": {
+            "items": {
+                "type": "object",
+                "properties": {
+                  "ESTADO": {
+                    "type": "string"
+                  },
+                  "NUMERO": {
+                    "type": "number"
+                  },
+                  "MAIL": {
+                    "type": "string"
+                  }
+                }
+            }
+        }
+      }
+    }
+  }
