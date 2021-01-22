@@ -89,7 +89,7 @@
           "tags": [
             "Users"
           ],
-          "description": "Crear nuevo usuario en el resto, por defecto lo creará como usuario no admin. Para pasarlo a admin debe cambiarse directamente sobre la BD",
+          "description": "Crear nuevo usuario en el resto, por defecto lo creará como usuario no admin.",
           "parameters": [
             {
               "name": "user",
@@ -106,6 +106,35 @@
           "responses": {
             "200": {
               "description": "Usuario creado con éxito"
+            },
+            "400": {
+              "description": "Faltan campos, por favor ingrese todos los datos || Ya existe este usuario, por favor ingrese otro || Ya existe un usuario asociado a ese mail, por favor ingrese otro"
+            }
+          }
+        }
+      },
+      "/add/adminuser": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "description": "Crear nuevo usuario administrador en el resto.",
+          "parameters": [
+            {
+              "name": "user",
+              "in": "body",
+              "description": "Usuario administrador que queremos crear",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Usuario administrador creado con éxito"
             },
             "400": {
               "description": "Faltan campos, por favor ingrese todos los datos || Ya existe este usuario, por favor ingrese otro || Ya existe un usuario asociado a ese mail, por favor ingrese otro"
@@ -260,9 +289,9 @@
             {
               "name": "product",
               "in": "body",
-              "description": "Productos disponibles",
+              "description": "Muestra productos disponibles y crea orden nueva para agregar productos",
               "schema": {
-                "$ref": "#/definitions/Mail"
+                "$ref": "#/definitions/Orden"
               }
             }
           ],
@@ -282,12 +311,12 @@
           }
         }
       },
-      "/create/order": {
+      "/addproduct/order": {
         "post": {
           "tags": [
             "Orders"
           ],
-          "description": "Crear orden a partir de selección de producto",
+          "description": "Agrega producto a la orden en estado 'nueva' del usuario, concatena los productos seleccionados en la descripcion de la orden y totaliza el pago",
           "parameters": [
             {
               "name": "orden",
@@ -303,7 +332,68 @@
           ],
           "responses": {
             "200": {
-              "description": "El producto fue agregado a la orden || Orden creada con éxito"
+              "description": "El producto fue agregado a la orden"
+            },
+            "401": {
+              "description": "Su sesión ha caducado, por favor inicie sesión nuevamente"
+            }
+          }
+        }
+      },
+      "/deleteproduct/order": {
+        "post": {
+          "tags": [
+            "Orders"
+          ],
+          "description": "Elimina producto a la orden en estado 'nueva' del usuario, concatena los productos seleccionados en la descripcion de la orden y totaliza el pago",
+          "parameters": [
+            {
+              "name": "orden",
+              "in": "body",
+              "description": "Orden",
+              "schema": {
+                "$ref": "#/definitions/Orden"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Producto eliminado con exito"
+            },
+            "401": {
+              "description": "Su sesión ha caducado, por favor inicie sesión nuevamente"
+            }
+          }
+        }
+      },
+      "/preview/order": {
+        "post": {
+          "tags": [
+            "Orders"
+          ],
+          "description": "Muestra la orden al cliente",
+          "parameters": [
+            {
+              "name": "orden",
+              "in": "body",
+              "description": "Orden",
+              "schema": {
+                "$ref": "#/definitions/Orden"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/Orden"
+              }
             },
             "401": {
               "description": "Su sesión ha caducado, por favor inicie sesión nuevamente"
@@ -336,6 +426,41 @@
             },
             "401": {
               "description": "Su sesión ha caducado, por favor inicie sesión nuevamente"
+            }
+          }
+        }
+      },
+      "/delete/order": {
+        "post": {
+          "tags": [
+            "Orders"
+          ],
+          "description": "Orden a eliminar",
+          "parameters": [
+            {
+              "name": "orden",
+                "in": "body",
+                "description": "Orden",
+              "schema": {
+                "$ref": "#/definitions/MailNum"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Orden eliminada con éxito"
+            },
+            "401": {
+              "description": "Su sesión ha caducado, por favor inicie sesión nuevamente"
+            },
+            "403": {
+              "description": "El usuario no tiene permisos para realizar esta acción"
+            },
+            "409": {
+              "description": "No existe una orden con este número, por favor ingrese otro"
             }
           }
         }
@@ -610,13 +735,13 @@
             "items": {
                 "type": "object",
                 "properties": {
-                  "DESCRIPCION": {
+                  "ID_PRODUCTO": {
                     "type": "object"
                   },
-                  "PAGO_TIPO": {
+                  "CANTIDAD_PRODUCTO": {
                     "type": "string"
                   },
-                  "PAGO_MONTO": {
+                  "PAGO_TIPOO": {
                     "type": "string"
                   },
                   "USUARIO": {

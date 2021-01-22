@@ -34,9 +34,9 @@ module.exports={
         MAIL:yup.string().required().email()
     }),
     order : yup.object().shape({
-        DESCRIPCION:yup.string().required(),
+        ID_PRODUCTO:yup.number().positive().integer().required(),
+        CANTIDAD_PRODUCTO:yup.number().positive().integer().required(),
         PAGO_TIPO:yup.string().required(),
-        PAGO_MONTO:yup.number().positive().integer().required(),
         USUARIO:yup.string().required(),
         DIRECCION:yup.string().required(),
         MAIL:yup.string().required().email()

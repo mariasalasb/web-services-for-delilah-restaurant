@@ -13,6 +13,8 @@ module.exports = {
         DB.query("SELECT * FROM USERS_INFO WHERE CORREO='"+MAIL+"'" ,{
             type:DB.QueryTypes.SELECT
         }).then((resultado) => {
+            console.log(resultado)
+            console.log(resultado[0].PASSWORD)
             if (resultado[0]==undefined){
                 res.status(403).json("Necesita registrarse para acceder");
             }
@@ -98,6 +100,21 @@ module.exports = {
             }
         });
     },
+    verifyordertochange: (req,res,next) => {
+        const {NUMERO}=req.body;
+        DB.query("SELECT * FROM ORDERS_INFO WHERE NUMERO="+NUMERO+""  ,{
+            type:DB.QueryTypes.SELECT
+        }).then((resultado) => {
+            if (resultado[0]==undefined){
+                res.status(409).json("No existe una orden con este número, por favor ingrese otro");
+            }
+            else if(resultado[0].NUMERO==NUMERO){
+                next();
+            }
+            else{
+            }
+        });
+    },
     statusorder: (req,res,next) => {
         const {ESTADO,NUMERO,MAIL}=req.body;
         DB.query('SELECT ESTADO FROM ORDERS_INFO WHERE NUMERO='+ NUMERO ,{
@@ -145,4 +162,5 @@ module.exports = {
             next();
         }
 },
+
 }
